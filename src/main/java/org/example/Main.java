@@ -8,35 +8,20 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
+
+
     public static void main(String... args) {
+
         int port = 8989;
+        File file = new File("categories.tsv");
+        Categories categories = getCategories(file);
 
-        //Сразу добавим категорию "другое"
-        ArrayList<String> arrayList = new ArrayList<>();
-        Category categoryOther = new Category("другое", arrayList, 0L);
-        ArrayList<Category> categoryArrayList = new ArrayList<>();
-        categoryArrayList.add(categoryOther);
-        Categories categories = new Categories(categoryArrayList);
 
-        try (BufferedReader br = new BufferedReader(new FileReader("categories.tsv"))) {
-            //чтение построчно
-            String s;
-            while ((s = br.readLine()) != null) {
-
-                String[] parts = s.split("\t");
-                String pokupka = parts[0];
-                String category = parts[1];
-                categories.addCategory(category, pokupka);
-
-            }
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
-
-        while (true) {
-            try (ServerSocket serverSocket = new ServerSocket(port);) { // порт можете выбрать любой в доступном диапазоне 0-65536. Но чтобы не нарваться на уже занятый - рекомендуем использовать около 8080
+        try (ServerSocket serverSocket = new ServerSocket(port);) { // порт можете выбрать любой в доступном диапазоне 0-65536. Но чтобы не нарваться на уже занятый - рекомендуем использовать около 8080
+            while (true) {
                 try (Socket clientSocket = serverSocket.accept(); // ждем подключения
                      PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                      BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -71,10 +56,36 @@ public class Main {
                 } catch (ParseException pe) {
                     pe.printStackTrace();
                 }
-
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
+    private static Categories getCategories(File file) {
+        //Сразу добавим категорию "другое"
+        List<String> categoriesList = new ArrayList<>();
+        Category categoryOther = new Category("другое", categoriesList, 0L);
+        List<Category> categoryArrayList = new ArrayList<>();
+        categoryArrayList.add(categoryOther);
+        Categories categories = new Categories(categoryArrayList);
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            //чтение построчно
+            String s;
+            while ((s = br.readLine()) != null) {
+
+                String[] parts = s.split("\t");
+                String product = parts[0];
+                String category = parts[1];
+                categories.addCategory(category, product);
+
+            }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return categories;
+    }
+
+
 }
