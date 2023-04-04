@@ -1,23 +1,24 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Category {
     private String name;
-    private ArrayList<String> pokupki = new ArrayList<>();
+    private List<String> products = new ArrayList<>();
 
     private Long catSum;
 
-    public Category(String name, ArrayList<String> pokupki, Long catSum) {
+    public Category(String name, List<String> products, Long catSum) {
         this.name = name;
-        this.pokupki = pokupki;
+        this.products = products;
         this.catSum = catSum;
 
     }
 
-    public void addPokupka(String pokupka) {
-        if (!pokupki.contains(pokupka)
-        ) pokupki.add(pokupka);
+    public void addProduct(String product) {
+        if (!products.contains(product)
+        ) products.add(product);
     }
 
     public String getName() {
@@ -28,8 +29,8 @@ public class Category {
         return catSum;
     }
 
-    public ArrayList<String> getPokupki() {
-        return pokupki;
+    public List<String> getProducts() {
+        return products;
     }
 
     public void setName(String name) {

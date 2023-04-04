@@ -1,70 +1,75 @@
 package org.example;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Categories implements Serializable {
-    private ArrayList<Category> categories;
+    private List<Category> categories;
 
-    public Categories(ArrayList<Category> categories) {
+    public Categories(List<Category> categories) {
         this.categories = categories;
     }
 
-    public void addCategory(String name, String pokupka) {
+    public void addCategory(String name, String product) {
         boolean flag = true;
         if ((this.categories != null)) {
             for (Category category : categories) {
                 if (category.getName().equals(name)) {
-                    category.addPokupka(pokupka);
+                    category.addProduct(product);
                     flag = false;
                 }
 
             }
             if (flag) //Надо добавить новую категорию
             {
-                ArrayList<String> pokupki = new ArrayList<>();
-                pokupki.add(pokupka);
-                Category category = new Category(name, pokupki, 0L);
+                List<String> products = new ArrayList<>();
+                products.add(product);
+                Category category = new Category(name, products, 0L);
                 categories.add(category);
             }
         } else {
-            ArrayList<String> pokupki = new ArrayList<>();
-            pokupki.add(pokupka);
-            Category category = new Category(name, pokupki, 0L);
+            List<String> products = new ArrayList<>();
+            products.add(product);
+            Category category = new Category(name, products, 0L);
             categories.add(category);
         }
     }
 
-    public String getCategoryName(String pokupka) {
+    public String getCategoryName(String product) {
         String catName = "другое";
         for (Category category : categories
         ) {
-            if (category.getPokupki().contains(pokupka))
+            if (category.getProducts().contains(product)) {
                 catName = category.getName();
-            break;
+                break;
+            }
         }
         return catName;
     }
 
-    public Category getCategory(String pokupka) {
+    public Category getCategory(String product) {
         String catName = "другое";
-        Category categoryN = null;
+        Category categoryNew = null;
         for (Category category : categories
         ) {
             if (category.getName() == "другое") {
-                categoryN = category;
+                categoryNew = category;
                 break;
             }
         }
 
         for (Category category : categories
         ) {
-            if (category.getPokupki().contains(pokupka)) {
-                categoryN = category;
+            if (category.getProducts().contains(product)) {
+                categoryNew = category;
                 break;
             }
         }
-        return categoryN;
+        return categoryNew;
     }
 
     public String maxCategory() {
@@ -78,7 +83,18 @@ public class Categories implements Serializable {
             }
 
         }
-        return "{ \"maxCategory\": {" + " \"category\": \"" + maxcategory + "\"," + "\"sum\":" + maxSum + "} }";
+
+        JSONObject categoryObject = new JSONObject();
+        JSONObject maxCategoryObject = new JSONObject();
+        JSONArray maxCategory = new JSONArray();
+        categoryObject.put("sum", maxSum);
+        categoryObject.put("category", maxcategory);
+
+        maxCategory.add(categoryObject);
+        maxCategoryObject.put("maxCategory", categoryObject);
+
+        return maxCategoryObject.toString();
+
     }
 
     public void addCategory(Category category) {

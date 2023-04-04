@@ -11,7 +11,7 @@ public class Client {
         try (Socket socket = new Socket("localhost", 8989);
              PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {//System.out.println(reader.readLine());
-            writer.println("{\"title\": \"чипсы\", \"date\": \"2022.02.08\", \"sum\": 600}");
+            writer.println("{\"title\": \"булка\", \"date\": \"2022.02.08\", \"sum\": 1000}");
 
             System.out.println(reader.readLine());
         } catch (IOException e) {
