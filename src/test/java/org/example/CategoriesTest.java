@@ -1,6 +1,8 @@
 package org.example;
 
 import junit.framework.TestCase;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.ArrayList;
@@ -117,7 +119,17 @@ public class CategoriesTest extends TestCase {
         categories.add(category3);
 
         Categories categoriesAll = new Categories(categories);
-        Assertions.assertEquals("{ \"maxCategory\": {" + " \"category\": \"" + category3.getName() + "\"," + "\"sum\":" + category3.getSum() + "} }", categoriesAll.maxCategory());
+
+        JSONObject categoryObject = new JSONObject();
+        JSONObject maxCategoryObject = new JSONObject();
+        JSONArray maxCategory = new JSONArray();
+        categoryObject.put("sum", category3.getSum());
+        categoryObject.put("category", category3.getName());
+
+        maxCategory.add(categoryObject);
+        maxCategoryObject.put("maxCategory", categoryObject);
+
+        Assertions.assertEquals(maxCategoryObject.toString(), categoriesAll.maxCategory());
     }
 
 }
