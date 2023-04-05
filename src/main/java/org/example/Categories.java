@@ -56,7 +56,7 @@ public class Categories implements Serializable {
         Category categoryNew = null;
         for (Category category : categories
         ) {
-            if (category.getName() == "другое") {
+            if (category.getName().equals("другое")) {
                 categoryNew = category;
                 break;
             }
